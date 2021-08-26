@@ -14,6 +14,7 @@ type templateHandler struct {
 	temp1    *template.Template
 }
 
+//serve template html file. template is compiled only once.
 func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.once.Do(func() {
 		t.temp1 =
@@ -23,8 +24,14 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	r:=newRoom()
+
 	http.Handle("/", &templateHandler{filename: "chat.html"})
-	//web serverを開始します
+	
+	http.Handle("/room",r)
+	//チャットルームを開始
+	go r.run()
+
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
