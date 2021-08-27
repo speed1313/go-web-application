@@ -12,6 +12,7 @@ import (
 
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/google"
+	"github.com/stretchr/gomniauth/providers/github"
 	"github.com/stretchr/objx"
 	"gopkg.in/ini.v1"
 )
@@ -20,6 +21,8 @@ import (
 type ConfigList struct {
     googleClientID     string
     googleClientSecret string
+	githubClientID     string
+    githubClientSecret string
 }
 // Config 設定リスト保持変数
 var Config ConfigList
@@ -35,6 +38,8 @@ func init() {
     Config = ConfigList{
         googleClientID:     cfg.Section("oauth").Key("googleClientID").String(),
         googleClientSecret: cfg.Section("oauth").Key("googleClientSecret").String(),
+		githubClientID:     cfg.Section("oauth").Key("githubClientID").String(),
+        githubClientSecret: cfg.Section("oauth").Key("githubClientSecret").String(),
     }
 }
 
@@ -66,7 +71,7 @@ func main() {
 	gomniauth.SetSecurityKey("security_key")
 	gomniauth.WithProviders(
 		//facebook.New("クライアントID","秘密の値","http://localhost:8080/auth/callback/facebook"),
-		//github.New("クライアントID","秘密の値","http://localhost:8080/auth/callback/github"),
+		github.New(Config.githubClientID,Config.githubClientSecret,"http://localhost:8080/auth/callback/github"),
 		google.New(Config.googleClientID,Config.googleClientSecret,"http://localhost:8080/auth/callback/google"),
 	)
 
