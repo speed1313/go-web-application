@@ -1,9 +1,11 @@
 package main
 
 import (
+	"chat/trace"
 	"flag"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sync"
 	"text/template"
@@ -29,7 +31,8 @@ func main() {
 	flag.Parse() //フラグを解釈する
 	r := newRoom()
 	//if you want to set trace, uncomment the following
-	//r.tracer = trace.New(os.Stdout)
+	r.tracer = trace.New(os.Stdout)
+
 	http.Handle("/", &templateHandler{filename: "chat.html"})
 
 	http.Handle("/room", r)
