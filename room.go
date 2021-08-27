@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/oreilly-japan/go-programming-blueprints/chapter1/trace"
+	"chat/trace"
 )
 
 //room controls clients and messages.

@@ -9,9 +9,9 @@ type client struct {
 	//socket is websocket for this client
 	socket *websocket.Conn
 	//send is channel which is send message from server.
-	send   chan []byte
+	send chan []byte
 	//room is chatroom where this client join.
-	room   *room
+	room *room
 }
 
 //read reads data from websocket using ReadMessage. The sent data will be sent to the room's forward channel immediately.
