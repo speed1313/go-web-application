@@ -26,5 +26,5 @@ func uploaderHandler(w http.ResponseWriter, req *http.Request) {
 		io.WriteString(w, err.Error())
 		return
 	}
-	io.WriteString(w, "成功")
+	io.WriteString(w, "成功->ログアウト後再びログインしてください")
 }

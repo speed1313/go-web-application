@@ -15,6 +15,17 @@ type Avatar interface {
 	//問題が発生したばあい, エラーを返す。 URLを取得できなかったらErrNoAvatarURLを返す
 	GetAvatarURL(u ChatUser) (string, error)
 }
+type TryAvatars []Avatar
+
+func (a TryAvatars) GetAvatarURL(u ChatUser) (string, error) {
+	for _, avatar := range a {
+		if url, err := avatar.GetAvatarURL(u); err == nil {
+			return url, nil
+		}
+	}
+	return "", ErrNoAvatarURL
+}
+
 type AuthAvatar struct{}
 
 var UseAuthAvatar AuthAvatar
@@ -34,7 +45,6 @@ var UseGravatar GravatarAvatar
 func (_ GravatarAvatar) GetAvatarURL(u ChatUser) (string, error) {
 	return "//www.gravatar.com/avatar/" + u.UniqueID(), nil
 }
-
 
 type FileSystemAvatar struct{}
 

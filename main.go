@@ -16,8 +16,13 @@ import (
 	"github.com/stretchr/objx"
 	"gopkg.in/ini.v1"
 )
+
 //active Avatar
-var avatars Avatar = UseFileSystemAvatar
+var avatars Avatar = TryAvatars{
+	UseFileSystemAvatar,
+	UseAuthAvatar,
+	UseGravatar,
+}
 
 // ConfigList 設定ファイルから取得したデータを保持する構造体
 type ConfigList struct {
@@ -78,7 +83,7 @@ func main() {
 		google.New(Config.googleClientID, Config.googleClientSecret, "http://localhost:8080/auth/callback/google"),
 	)
 
-	r := newRoom(UseFileSystemAvatar)
+	r := newRoom()
 	//if you want to set trace, uncomment the following
 	r.tracer = trace.New(os.Stdout)
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))

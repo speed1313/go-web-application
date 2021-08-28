@@ -27,7 +27,7 @@ type room struct {
 }
 
 // newRoomはすぐに利用できるチャットルームを生成して返します。roomの宣言を楽にする.
-func newRoom(avatar Avatar) *room {
+func newRoom() *room {
 	return &room{
 		forward: make(chan *message),
 		join:    make(chan *client),
