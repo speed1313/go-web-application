@@ -22,16 +22,17 @@ type room struct {
 	clients map[*client]bool
 	// tracerはチャットルーム上で行われた操作のログを受け取ります。
 	tracer trace.Tracer
+	//avatarはアバターの情報を取得します
+	avatar Avatar
 }
 
 // newRoomはすぐに利用できるチャットルームを生成して返します。roomの宣言を楽にする.
-func newRoom() *room {
+func newRoom(avatar Avatar) *room {
 	return &room{
 		forward: make(chan *message),
 		join:    make(chan *client),
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),
-
 	}
 }
 
@@ -84,19 +85,18 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	authCookie,err:=req.Cookie("auth")
-	if err!=nil{
-		log.Fatal("クッキーの取得に失敗しました:",err)
+	authCookie, err := req.Cookie("auth")
+	if err != nil {
+		log.Fatal("クッキーの取得に失敗しました:", err)
 		return
 	}
 
 	client := &client{
-		socket: socket,
-		send:   make(chan *message, messageBufferSize),
-		room:   r,
+		socket:   socket,
+		send:     make(chan *message, messageBufferSize),
+		room:     r,
 		userData: objx.MustFromBase64(authCookie.Value),
 	}
-
 
 	r.join <- client
 	defer func() { r.leave <- client }()

@@ -1,10 +1,13 @@
 package main
-import(
+
+import (
 	"time"
 )
+
 //message represents one message
-type message struct{
-	Name string
-	Message string
-	When time.Time
+type message struct {
+	Name      string
+	Message   string
+	When      time.Time
+	AvatarURL string
 }
